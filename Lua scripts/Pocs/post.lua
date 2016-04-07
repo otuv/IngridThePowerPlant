@@ -18,14 +18,14 @@ if moistVal<200 then
     conn=net.createConnection(net.TCP, 0)
     conn:on("receive", function(conn, payload) end)
     conn:connect(80,"maker.ifttt.com")
-    conn:on("connection", function(conn, payload) end)
-    conn:send("POST /trigger/incoming_tweet/with/key/oTS9rXKLzheS0YN78Hlcg4l4ZSC4yfWlUbhPeUr1zW8 HTTP/1.1\r\n")
+    conn:on("connection", function(conn, payload)
+    conn:send("POST /trigger/incoming_tweet/with/key/oTS9rXKLzheS0YN78Hlcg5MQYvEfFwDcFS8hXvjB2t6 HTTP/1.1\r\n")
     conn:send("Host: maker.ifttt.com\r\n") 
     conn:send("Accept: */*\r\n") 
     conn:send("Content-Type: application/json\r\n")
     conn:send("Content-Length: " .. intStringLength .. "\r\n\r\n" .. valueString .. "\r\n")
 
-    conn:close()
+    conn:close() end)
     print('Tweet posted')
 else
     print('No Tweet posted')

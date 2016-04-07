@@ -4,7 +4,9 @@ function startup()
         return
         end
     print('initializing')
-    dofile('testscript.lua')
+    dofile('indicators.lua')
+    dofile('wifi.lua')
+    dofile('main.lua')
     end
 
 abort = false

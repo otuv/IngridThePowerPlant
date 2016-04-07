@@ -1,0 +1,1 @@
+assert(loadfile('tweet.lua'))(998, 'incoming_tweet')
