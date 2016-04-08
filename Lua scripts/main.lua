@@ -1,39 +1,32 @@
 print('running main')
 
-debugEnabled = false
-abort = false
-sleeptime = 60 * 60 * 1000 --= 0,5hr - Production
---sleeptime = 5 * 1000 --= 5s - Test
-waterThreshold = 100
-needOfWater = false
+-- local constants
+         --  m    s     ms
+SLEEPTIME = 20 * 60 * 1000
 
-tmr.alarm(0, sleeptime, 1, function()
-    moistVal = dofile('readmoist.lua')
-    print(moistVal)
-    if moistVal > waterThreshold then
-        needOfWater = true
-        assert(loadfile('tweet.lua'))(moistVal, 'incoming_tweet')
-        followup()
+-- init local variables
+moist = 0
+mth = 90    --Moist ThresHold
+lst = 0     --Loops Since Tweet 
+
+tmr.alarm(0, SLEEPTIME, 1, function() -- the loop
+    print('measure moist') 
+    moist = dofile('readmoist.lua') -- get moist reading
+    print('Evaluating ' .. tostring(moist))
+    if moist > mth then -- = in need of water
+        gpio.write(2,gpio.LOW)
+        gpio.write(3,gpio.HIGH)
+        print('need water, lst:' .. tostring(lst))
+        if lst == 0 or lst == 5 then -- = not recently tweeted
+            lst = 0 -- reset loopcounter
+            print('tweet')
+            assert(loadfile('tweet.lua'))(moist, 'incoming_tweet')
+        end
+        lst = lst +1 -- one more loop since last tweet
+    else
+        lst = 0 -- whaterver loopcounter was on, its 0 now
+        gpio.write(3,gpio.LOW)
+        gpio.write(2,gpio.HIGH)
+        print('water ok')
     end
 end)
-
-function followup()
-    iterations = 0
-    while needOfWater do
-        tmr.delay(sleeptime)
-        iterations = iterations +1
-        moistVal = dofile('readmoist.lua')
-        if moistVal > waterThreshold  and iterations == 16 then
-            iterations = 0
-            assert(loadfile('tweet.lua'))(moistVal, 'incoming_tweet')
-        elseif moistVal < waterThreshold then
-            needOfWater = false
-        end
-    end
-end
-
-function debug(debugMessage)
-    if debugEnabled then
-        print(debugMessage)
-    end
-end

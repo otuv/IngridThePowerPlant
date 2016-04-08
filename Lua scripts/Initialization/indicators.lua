@@ -1,7 +1,7 @@
 -- Prepare indicator lights
 print('Preparing indicators')
-gpio.mode(2,gpio.OUTPUT)
+gpio.mode(2,gpio.OUTPUT) -- Green
 gpio.write(2,gpio.LOW)
-gpio.mode(3,gpio.OUTPUT)
+gpio.mode(3,gpio.OUTPUT) -- Red
 gpio.write(3,gpio.LOW)
 print('Indicators ready')
