@@ -1,0 +1,19 @@
+﻿1. Run init.lua
+	1. Run indicators.lua
+		R + G 2s => both lights are working
+	2. Run wifi.lua repeat wifi ready
+		R b => problem connecting to wifi trying to fix, 10 loops.
+		G 3s => wifi ready
+		R 3s => wifi failed
+	3. Run main.lua
+		Run readmoist.lua
+			G b5 => reading moisture
+			R/G 
+				R = need water
+					G b10 => tweeting
+					Run tweet.lua
+						G 3s => wifi ok
+						R 3s => wifi failed
+							Run wifi.lua
+				G = ok
+		

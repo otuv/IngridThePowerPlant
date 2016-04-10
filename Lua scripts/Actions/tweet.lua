@@ -8,32 +8,36 @@ intStringLength = string.len(valueString)
 
 if wifi.sta.status() == 5 then
     gpio.write(2,gpio.HIGH)
-    tmr.delay(2000000)
+    tmr.delay(3 * 1000 * 1000)
     gpio.write(2,gpio.LOW)
     print('Wifi ok ' .. wifi.sta.getip())
     
     conn = nil
     conn=net.createConnection(net.TCP, 0)
-    conn:on("receive", function(conn, payload)
-                        print(payload)
+    conn:on("receive", function(call, payload)
+                        print('payload: ' .. tostring(payload))
                         end)
-    conn:on("connection", function(conn, payload)
+    conn:on("connection", function(call, payload)
         print('Connected')
-        conn:send("POST /trigger/" .. tweetEvent .. "/with/key/oTS9rXKLzheS0YN78Hlcg5MQYvEfFwDcFS8hXvjB2t6 HTTP/1.1\r\n")
-        conn:send("Host: maker.ifttt.com\r\n") 
-        conn:send("Accept: */*\r\n") 
-        conn:send("Content-Type: application/json\r\n")
-        conn:send("Content-Length: " .. intStringLength .. "\r\n\r\n" .. valueString .. "\r\n")
-        conn:close() end)
+        call:send("POST /trigger/" .. tweetEvent .. "/with/key/oTS9rXKLzheS0YN78Hlcg5MQYvEfFwDcFS8hXvjB2t6 HTTP/1.1\r\n" ..
+                    "Host: maker.ifttt.com\r\n" ..
+                    "Accept: */*\r\n" ..
+                    "Content-Type: application/json\r\n" ..
+                    "Content-Length: " .. intStringLength .. "\r\n\r\n" .. valueString .. "\r\n"
+        ) end)
+        --conn:send("POST /trigger/" .. tweetEvent .. "/with/key/oTS9rXKLzheS0YN78Hlcg5MQYvEfFwDcFS8hXvjB2t6 HTTP/1.1\r\n")
+        --conn:send("Host: maker.ifttt.com\r\n") 
+        --conn:send("Accept: */*\r\n") 
+        --conn:send("Content-Type: application/json\r\n")
+        --conn:send("Content-Length: " .. intStringLength .. "\r\n\r\n" .. valueString .. "\r\n")
 
     conn:on("disconnection", function(conn, payload) print('Disconnected') end)
     
     conn:connect(80,"maker.ifttt.com")
-    tmr.delay(30 * 1000 * 1000)
-    print('tweeted')
+    print('tweeting!')
 else
     gpio.write(3,gpio.HIGH)
-    tmr.delay(2000000)
+    tmr.delay(3 * 1000 * 1000)
     gpio.write(3,gpio.LOW)
     dofile('wifi.lua')
 end

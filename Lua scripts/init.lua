@@ -5,7 +5,9 @@ function startup()
         end
     print('initializing')
     dofile('indicators.lua')
-    dofile('wifi.lua')
+    while wifi.sta.status() ~= 5 do
+        dofile('wifi.lua')
+    end
     dofile('main.lua')
     end
 
