@@ -11,6 +11,13 @@ if wifi.sta.status() == 5 then
     tmr.delay(3 * 1000 * 1000)
     gpio.write(2,gpio.LOW)
     print('Wifi ok ' .. wifi.sta.getip())
+
+    moist = dofile('readmoist.lua') -- get moist reading
+    makerChannelKey = dofile("makerchannelkey.lua") -- get makerchannel key
+    gpio.write(2,gpio.HIGH)
+    tmr.delay(1 * 500 * 1000)
+    gpio.write(2,gpio.LOW)
+    print('Makerchannel key loaded ' .. tostring(makerChannelKey))
     
     conn = nil
     conn=net.createConnection(net.TCP, 0)
@@ -19,7 +26,7 @@ if wifi.sta.status() == 5 then
                         end)
     conn:on("connection", function(call, payload)
         print('Connected')
-        call:send("POST /trigger/" .. tweetEvent .. "/with/key/oTS9rXKLzheS0YN78Hlcg5MQYvEfFwDcFS8hXvjB2t6 HTTP/1.1\r\n" ..
+        call:send("POST /trigger/" .. tweetEvent .. "/with/key/" .. makerChannelKey .. " HTTP/1.1\r\n" ..
                     "Host: maker.ifttt.com\r\n" ..
                     "Accept: */*\r\n" ..
                     "Content-Type: application/json\r\n" ..
