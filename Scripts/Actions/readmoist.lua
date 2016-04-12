@@ -13,9 +13,9 @@ print('moistVal = ' .. tostring(readVal))
 gpio.write(1,gpio.LOW)
 
 if readVal >= 150 then
-    outVal = 150
+    outVal = 0
 elseif readVal <= 50 then
-    outVal = 50
+    outVal = 100
 else
     outVal = (readVal - 150)*-1
 end
