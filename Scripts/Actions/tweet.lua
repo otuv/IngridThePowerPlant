@@ -32,9 +32,15 @@ if wifi.sta.status() == 5 then
                     "Content-Length: " .. intStringLength .. "\r\n\r\n" .. valueString .. "\r\n"
         ) end)
     conn:on("disconnection", function(conn, payload) print('Disconnected') end)
-    
     conn:connect(80,"maker.ifttt.com")
+    
     print('tweeting!')
+    for i=1,10 do -- blink green light
+        gpio.write(2,gpio.HIGH)
+        tmr.delay(1 * 200 * 1000)
+        gpio.write(2,gpio.LOW)
+        tmr.delay(1 * 200 * 1000)
+    end
 else
     gpio.write(3,gpio.HIGH)
     tmr.delay(3 * 1000 * 1000)
