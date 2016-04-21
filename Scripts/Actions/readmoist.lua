@@ -16,16 +16,10 @@ for i=1,noi do -- blink green light while reading
 end
 gpio.write(2,gpio.LOW)
 
-print('table.getn(readVals) ' .. table.getn(readVals))
-
-for k,v in ipairs(readVals) do
-    print('value ' .. k .. ' = ' .. v)
-end
-
 -- filter values
-table.sort(readVals) 
-table.remove(readVals, noi)
-table.remove(readVals, 1)
+--table.sort(readVals) 
+--table.remove(readVals, table.getn(readVals))
+--table.remove(readVals, 1)
 
 for k,v in ipairs(readVals) do
     print('value ' .. k .. ' = ' .. v)
