@@ -1,6 +1,6 @@
 -- Setup wifi
 wifi.setmode(wifi.STATION)
-wifi.sta.config("LooNet","NallePutin")
+wifi.sta.config("User","Password")
 tmr.delay(1000000)
 print('Wifi initiated')
 
